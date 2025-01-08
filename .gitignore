@@ -3,6 +3,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+DioShop_Backend/DioShop.Api/appsettings.json
+
+
+
 # User-specific files
 *.rsuser
 *.suo
