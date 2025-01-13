@@ -42,8 +42,6 @@ builder.Services.AddSwaggerGen(option =>
 
 builder.Services.AddAuthentication();
 
-
-
 builder.Services.AddAuthorization();
 
 builder.Services.AddCors();
@@ -61,6 +59,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.UseCors(x => x

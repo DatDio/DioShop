@@ -66,7 +66,7 @@ namespace DioShop.Infrastructure.Services
 
             if (!result.Succeeded)
             {
-                throw new UnauthorizedException("Email or password is not valid. If not please confirm your email before login");
+                throw new UnauthorizedException("Email or password is not valid!");
             }
             JwtSecurityToken jwtSecurityToken = await GenerateAccessToken(user);
             var refreshToken = GenerateRefreshToken();
@@ -127,16 +127,16 @@ namespace DioShop.Infrastructure.Services
                 {
                     await _userManager.AddToRoleAsync(user, Role.RoleCustomer);
 
-                    var domainName = _configuration.GetValue<string>("Client:Host");
+                    //var domainName = _configuration.GetValue<string>("Client:Host");
 
-                    var uri = await GenerateEmailConfirmationTokenAsync(user, domainName);
+                    //var uri = await GenerateEmailConfirmationTokenAsync(user, domainName);
 
-                    await _emailSender.SendEmail(new Email
-                    {
-                        Body = uri,
-                        Subject = "Email confirm",
-                        To = user.Email
-                    });
+                    //await _emailSender.SendEmail(new Email
+                    //{
+                    //    Body = uri,
+                    //    Subject = "Email confirm",
+                    //    To = user.Email
+                    //});
 
                     return new RegistrationResponse() { UserId = user.Id };
                 }
@@ -205,7 +205,7 @@ namespace DioShop.Infrastructure.Services
         }
 
 
-        [Authorize]
+      
         public async Task<bool> Revoke()
         {
 
@@ -213,7 +213,7 @@ namespace DioShop.Infrastructure.Services
 
             var user = await _userManager.FindByIdAsync(userId);
 
-            if (user != null)
+            if (user == null)
             {
                 return false;
             }
@@ -277,7 +277,8 @@ namespace DioShop.Infrastructure.Services
             };
         }
 
-        private async Task<string> GenerateEmailConfirmationTokenAsync(ApplicationUser user, string origin)
+        public async Task<string> GenerateEmailConfirmationTokenAsync(ApplicationUser user, 
+                                                        string origin)
         {
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 

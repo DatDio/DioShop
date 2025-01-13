@@ -16,6 +16,15 @@ namespace DioShop.Api.Middlewares
             try
             {
                 await _next(httpContext);
+                //// Kiểm tra lỗi Authorization
+                //if (httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized)
+                //{
+                //    //await HandleAuthorizationError(httpContext, "You are not authorized to access this resource.");
+                //}
+                //else if (httpContext.Response.StatusCode == StatusCodes.Status403Forbidden)
+                //{
+                //   // await HandleAuthorizationError(httpContext, "You do not have permission to access this resource.");
+                //}
             }
             catch (Exception ex)
             {

@@ -1,6 +1,7 @@
 ﻿using DioShop.Application.Contracts.Infrastructure.Identity;
 using DioShop.Application.Models.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DioShop.Api.Controllers
@@ -31,17 +32,17 @@ namespace DioShop.Api.Controllers
 
             return Ok(responseLogin);
         }
-        [HttpPost("ConfirmEmail")]
 
-        public async Task<ActionResult> ConfirmEmail(ConfirmAccountRequest request)
-        {
-            var response = await _authService.ConfirmEmailAsync(request.UserId, request.Token);
-            if (response)
-            {
-                return Ok();
-            }
-            return BadRequest();
-        }
+        //[HttpPost("ConfirmEmail")]
+        //public async Task<ActionResult> ConfirmEmail(ConfirmAccountRequest request)
+        //{
+        //    var response = await _authService.ConfirmEmailAsync(request.UserId, request.Token);
+        //    if (response)
+        //    {
+        //        return Ok();
+        //    }
+        //    return BadRequest();
+        //}
 
         [HttpPost("Refresh")]
         public async Task<ActionResult> Refresh(RefreshRequest request)
@@ -51,7 +52,7 @@ namespace DioShop.Api.Controllers
             return Ok(response);
         }
 
-
+        [Authorize]
         [HttpPost("Revoke")]
         public async Task<ActionResult> Revoke()
         {

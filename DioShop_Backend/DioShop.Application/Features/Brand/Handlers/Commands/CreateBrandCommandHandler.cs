@@ -47,17 +47,17 @@ namespace DioShop.Application.Features.Brand.Handlers.Commands
             await _unitOfWork.Save();
 
 
-            var emailAddress = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value;
+            //var emailAddress = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value;
 
-            var email = new Email
-            {
-                To = "hieucobappp@gmail.com",
-                Body = $"Created" +
-                    $"successfully.",
-                Subject = "Test email"
-            };
+            //var email = new Email
+            //{
+            //    To = "hieucobappp@gmail.com",
+            //    Body = $"Created" +
+            //        $"successfully.",
+            //    Subject = "Test email"
+            //};
 
-            await _emailSender.SendEmail(email);
+            //await _emailSender.SendEmail(email);
 
 
             return brand.Id;

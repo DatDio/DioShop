@@ -30,7 +30,7 @@ namespace DioShop.Infrastructure
         {
             services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
-
+            
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddDbContext<ApplicationDbContext>(options =>
                options.UseSqlServer(
@@ -43,7 +43,7 @@ namespace DioShop.Infrastructure
 
             // use aspnetcore identity 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-                options.SignIn.RequireConfirmedAccount = true)
+                options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
 

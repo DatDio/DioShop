@@ -36,25 +36,25 @@ namespace DioShop.Infrastructure.Data
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
 
-        //public virtual async Task<int> SaveChangesAsync(string username = "SYSTEM")
-        //{
-        //    foreach (var entry in base.ChangeTracker.Entries<BaseDomainEntity>()
-        //        .Where(q => q.State == EntityState.Added || q.State == EntityState.Modified))
-        //    {
-        //        entry.Entity.LastModified = DateTime.Now;
-        //        entry.Entity.LastModifiedBy = username;
+        public virtual async Task<int> SaveChangesAsync(string username = "SYSTEM")
+        {
+            foreach (var entry in base.ChangeTracker.Entries<BaseDomainEntity>()
+                .Where(q => q.State == EntityState.Added || q.State == EntityState.Modified))
+            {
+                entry.Entity.LastModified = DateTime.Now;
+                entry.Entity.LastModifiedBy = username;
 
-        //        if (entry.State == EntityState.Added)
-        //        {
-        //            entry.Entity.CreatedAt = DateTime.Now;
-        //            entry.Entity.CreatedBy = username;
-        //        }
-        //    }
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.CreatedAt = DateTime.Now;
+                    entry.Entity.CreatedBy = username;
+                }
+            }
 
-        //    var result = await base.SaveChangesAsync();
+            var result = await base.SaveChangesAsync();
 
-        //    return result;
-        //}
+            return result;
+        }
 
     }
 }
