@@ -15,15 +15,18 @@ namespace DioShop.Infrastructure.Repositories
         private readonly ApplicationDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private IDbContextTransaction _objTran;
+		private readonly IFileStoreageRepository _fileStoreageRepository;
+		// Constructor nhận DI
+		public UnitOfWork(ApplicationDbContext context,
+						  IHttpContextAccessor httpContextAccessor,
+						  IFileStoreageRepository fileStoreageRepository)
+		{
+			_context = context;
+			_httpContextAccessor = httpContextAccessor;
+			_fileStoreageRepository = fileStoreageRepository;
+		}
 
-        public UnitOfWork(ApplicationDbContext context, 
-            IHttpContextAccessor httpContextAccessor)
-        {
-            _context = context;
-            this._httpContextAccessor = httpContextAccessor;
-        }
-
-        private ICouponRepository _couponRepository;
+		private ICouponRepository _couponRepository;
 
         public ICouponRepository CouponRepository =>
            _couponRepository ??= new CouponRepository(_context);
@@ -64,7 +67,11 @@ namespace DioShop.Infrastructure.Repositories
         public IProductRepository ProductRepository =>
             _productRepository ??= new ProductRepository(_context);
 
-        private IProductTagRepository _productTagRepository;
+		// Repository cho FileStorage
+		public IFileStoreageRepository FileStoreageRepository => _fileStoreageRepository;
+
+
+		private IProductTagRepository _productTagRepository;
         public IProductTagRepository ProductTagRepository =>
             _productTagRepository ??= new ProductTagRepository(_context);
 

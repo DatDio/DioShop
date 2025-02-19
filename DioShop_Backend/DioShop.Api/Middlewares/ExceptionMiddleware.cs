@@ -17,50 +17,56 @@ namespace DioShop.Api.Middlewares
             {
                 await _next(httpContext);
                 //// Kiểm tra lỗi Authorization
-                //if (httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized)
-                //{
-                //    //await HandleAuthorizationError(httpContext, "You are not authorized to access this resource.");
-                //}
-                //else if (httpContext.Response.StatusCode == StatusCodes.Status403Forbidden)
-                //{
-                //   // await HandleAuthorizationError(httpContext, "You do not have permission to access this resource.");
-                //}
+                if (httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized)
+                {
+                    //await HandleAuthorizationError(httpContext, "You are not authorized to access this resource.");
+                    throw new Exception("You are not authorized to access this resource.Please log in to continue");
+                }
+                else if (httpContext.Response.StatusCode == StatusCodes.Status403Forbidden)
+                {
+                    // await HandleAuthorizationError(httpContext, "You do not have permission to access this resource.");
+                    throw new Exception("You do not have permission to access this resource.");
+                }
             }
             catch (Exception ex)
             {
                 await HandleExceptionAsync(httpContext, ex);
             }
         }
-        private Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            context.Response.ContentType = "application/json";
-            HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
-            string result = JsonConvert.SerializeObject(new ErrorDetails
+            var statusCode = HttpStatusCode.InternalServerError;
+            var errorType = "Failure";
+            //var errorMessage = "An unexpected error occurred.";
+            var errorMessage = exception.Message;
+            if (exception is ValidationException validationException)
             {
-                ErrorMessage = exception.Message,
-                ErrorType = "Failure"
-            });
-
-            switch (exception)
+                statusCode = HttpStatusCode.BadRequest;
+                errorMessage = JsonConvert.SerializeObject(validationException.Errors);
+            }
+            else if (exception is NotFoundException notFoundException)
             {
-                case BadRequestException badRequestException:
-                    statusCode = HttpStatusCode.BadRequest;
-                    break;
-                case ValidationException validationException:
-                    statusCode = HttpStatusCode.BadRequest;
-                    result = JsonConvert.SerializeObject(validationException.Errors);
-                    break;
-                case NotFoundException notFoundException:
-                    statusCode = HttpStatusCode.NotFound;
-                    break;
-                case UnauthorizedException unauthorizedException:
-                    statusCode = HttpStatusCode.Unauthorized;
-                    break;
-                default:
-                    break;
+                statusCode = HttpStatusCode.NotFound;
+                errorMessage = notFoundException.Message;
+            }
+            else if (exception is UnauthorizedException unauthorizedException)
+            {
+                statusCode = HttpStatusCode.Unauthorized;
+                errorMessage = unauthorizedException.Message;
             }
 
+            // Định dạng phản hồi JSON
+            var response = new ErrorDetails
+            {
+                ErrorType = errorType,
+                ErrorMessage = errorMessage
+            };
+
+            var result = JsonConvert.SerializeObject(response);
+
+            context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
+
             return context.Response.WriteAsync(result);
         }
     }

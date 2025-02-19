@@ -48,7 +48,15 @@ namespace DioShop.Application.Features.CartItem.Handlers.Commands
 
             var cartItem = _mapper.Map<DioShop.Domain.Entities.CartItem>(request.CartItemDto);
             cartItem = await _unitOfWork.CartItemRepository.Add(cartItem);
-            await _unitOfWork.Save();
+            try
+            {
+				await _unitOfWork.Save();
+			}
+            catch
+            {
+
+            }
+            
 
             return cartItem.Id;
         }

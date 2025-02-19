@@ -8,6 +8,7 @@ namespace DioShop.Application.Models.Identity
 {
     public class RegistrationResponse
     {
+        public bool Success { get; set; }
         public string UserId { get; set; }
     }
 }

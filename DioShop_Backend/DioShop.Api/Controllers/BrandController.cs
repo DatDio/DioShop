@@ -37,9 +37,9 @@ namespace DioShop.Api.Controllers
 
         [HttpPost]
         [Authorize(Roles = Role.RoleAdmin)]
-        public async Task<ActionResult> Post([FromBody] CreateBrandDto productItem)
+        public async Task<ActionResult> Post([FromBody] CreateBrandDto brandDto)
         {
-            var command = new CreateBrandCommand { BrandDto = productItem };
+            var command = new CreateBrandCommand { BrandDto = brandDto };
             var response = await _mediator.Send(command);
 
             return Ok(response);

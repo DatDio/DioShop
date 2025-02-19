@@ -40,15 +40,26 @@ namespace DioShop.Infrastructure
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+			services.AddScoped<IFileStoreageRepository, FileStorageRepository>();
+			// use aspnetcore identity 
+			services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+			{
+				options.SignIn.RequireConfirmedAccount = false;
 
-            // use aspnetcore identity 
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-                options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+				
+				options.Password.RequireDigit = false; 
+				options.Password.RequireLowercase = false; 
+				options.Password.RequireUppercase = false; 
+				options.Password.RequireNonAlphanumeric = false; 
+				options.Password.RequiredLength = 6; 
+			})
+ .AddEntityFrameworkStores<ApplicationDbContext>()
+ .AddDefaultTokenProviders();
 
 
 
-            services.AddTransient<IAuthService, AuthService>();
+
+			services.AddTransient<IAuthService, AuthService>();
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

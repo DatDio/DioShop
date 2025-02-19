@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DioShop.Application.Contracts.Infrastructure.IRepositories;
 using DioShop.Application.DTOs.Brand;
+using DioShop.Application.DTOs.ProductTag;
 using DioShop.Application.Features.Brand.Requests.Queries;
+using DioShop.Application.Ultils;
 using MediatR;
 
 namespace DioShop.Application.Features.Brand.Handlers.Queries
 {
-    public class GetBrandListRequestHandler : IRequestHandler<GetBrandListRequest, List<BrandDto>>
+    public class GetBrandListRequestHandler : IRequestHandler<GetBrandListRequest, ApiResponse<List<BrandDto>>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -22,10 +24,25 @@ namespace DioShop.Application.Features.Brand.Handlers.Queries
             _mapper = mapper;
         }
 
-        public async Task<List<BrandDto>> Handle(GetBrandListRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResponse<List<BrandDto>>> Handle(GetBrandListRequest request, CancellationToken cancellationToken)
         {
             var brands = await _unitOfWork.BrandRepository.GetAll();
-            return _mapper.Map<List<BrandDto>>(brands);
+            var branDto = _mapper.Map<List<BrandDto>>(brands);
+            if (branDto.Count == 0)
+            {
+                return new ApiResponse<List<BrandDto>>
+                {
+                    Success = false,
+                    Message = "",
+                    Data = null
+                };
+            }
+            return new ApiResponse<List<BrandDto>>
+            {
+                Success = true,
+                Message = null,
+                Data = branDto
+            }; ;
         }
     }
 }

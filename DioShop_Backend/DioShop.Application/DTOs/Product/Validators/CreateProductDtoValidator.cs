@@ -19,30 +19,30 @@ namespace DioShop.Application.DTOs.Product.Validators
             _categoryRepository = categoryRepository;
 
 
-            RuleFor(p => p.Name)
-             .NotEmpty().WithMessage("{PropertyName} is required");
+            //RuleFor(p => p.Name)
+            // .NotEmpty().WithMessage("{PropertyName} is required");
 
-            RuleFor(p => p.Description)
-             .NotEmpty().WithMessage("{PropertyName} is required");
+            //RuleFor(p => p.Description)
+            // .NotEmpty().WithMessage("{PropertyName} is required");
 
-            RuleFor(p => p.BrandId)
-                 .MustAsync(async (id, token) => {
-                     var brandExists = await _brandRepository.Exists(id);
-                     return brandExists;
-                 })
-                .WithMessage("{PropertyName} does not exist.")
-                .NotNull().WithMessage("{PropertyName} is required");
+            //RuleFor(p => p.BrandId)
+            //     .MustAsync(async (id, token) => {
+            //         var brandExists = await _brandRepository.Exists(id);
+            //         return brandExists;
+            //     })
+            //    .WithMessage("{PropertyName} does not exist.")
+            //    .NotNull().WithMessage("{PropertyName} is required");
 
-            RuleFor(p => p.CategoryId)
-                .MustAsync(async (id, token) => {
-                    var categoryExists = await _categoryRepository.Exists(id);
-                    return categoryExists;
-                })
-                .WithMessage("{PropertyName} does not exist.")
-                .NotNull().WithMessage("{PropertyName} is required");
+            //RuleFor(p => p.CategoryId)
+            //    .MustAsync(async (id, token) => {
+            //        var categoryExists = await _categoryRepository.Exists(id);
+            //        return categoryExists;
+            //    })
+            //    .WithMessage("{PropertyName} does not exist.")
+            //    .NotNull().WithMessage("{PropertyName} is required");
 
-            RuleFor(p => p.ImageUrl)
-             .NotNull().WithMessage("{PropertyName} is required");
+            //RuleFor(p => p.ImageUrl)
+            // .NotNull().WithMessage("{PropertyName} is required");
         }
     }
 }

@@ -24,7 +24,7 @@ namespace DioShop.Application.DTOs.Order
         public decimal OrderTotal { get; set; }
         public string Status { get; set; }
         public string PaymentIntentId { get; set; }
-        public string StripeSessionId { get; set; }
+        //public string StripeSessionId { get; set; }
         public DateTime? CreatedAt { get; set; }
         public ICollection<OrderItemDto> OrderItems { get; set; }
     }

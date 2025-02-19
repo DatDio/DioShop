@@ -1,4 +1,5 @@
 ﻿using DioShop.Application.Contracts.Infrastructure.Identity;
+using DioShop.Application.Features.Cart.Requests.Commands;
 using DioShop.Application.Models.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -28,7 +29,7 @@ namespace DioShop.Api.Controllers
         public async Task<ActionResult> Register(RegistrationRequest request)
         {
             var responseLogin = await _authService.Register(request);
-            //await _mediator.Send(new CreateCartCommand { UserId = responseLogin.UserId });
+            await _mediator.Send(new CreateCartCommand { UserId = responseLogin.UserId });
 
             return Ok(responseLogin);
         }

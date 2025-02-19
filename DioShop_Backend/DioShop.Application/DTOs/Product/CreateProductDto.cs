@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,7 @@ namespace DioShop.Application.DTOs.Product
         public int CategoryId { get; set; }
         public int BrandId { get; set; }
         public string ImageUrl { get; set; }
+        public IFormFile Image { get; set; }
+
     }
 }

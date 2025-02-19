@@ -14,53 +14,53 @@ using Microsoft.AspNetCore.Http;
 
 namespace DioShop.Application.Features.CartItem.Handlers.Commands
 {
-    public class UpdateCartItemCommandHandler : IRequestHandler<UpdateCartItemCommand, Unit>
-    {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+	public class UpdateCartItemCommandHandler : IRequestHandler<UpdateCartItemCommand, Unit>
+	{
+		private readonly IUnitOfWork _unitOfWork;
+		private readonly IMapper _mapper;
+		private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UpdateCartItemCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _httpContextAccessor = httpContextAccessor;
-        }
+		public UpdateCartItemCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+		{
+			_unitOfWork = unitOfWork;
+			_mapper = mapper;
+			_httpContextAccessor = httpContextAccessor;
+		}
 
-        public async Task<Unit> Handle(UpdateCartItemCommand request, CancellationToken cancellationToken)
-        {
-            var userId = _httpContextAccessor.HttpContext.User.FindFirst(CustomClaimTypes.Uid).Value;
+		public async Task<Unit> Handle(UpdateCartItemCommand request, CancellationToken cancellationToken)
+		{
+			var userId = _httpContextAccessor.HttpContext.User.FindFirst(CustomClaimTypes.Uid).Value;
 
-            if (!(await _unitOfWork.CartItemRepository.IsItemOwnedByUser(request.CartItemDto.Id, userId)))
-            {
-                throw new BadRequestException("Something went wrong");
-            }
+			if (!(await _unitOfWork.CartItemRepository.IsItemOwnedByUser(request.CartItemDto.Id, userId)))
+			{
+				throw new BadRequestException("Something went wrong");
+			}
 
-            var validator = new UpdateCartItemDtoValidator();
-            var validatorResult = await validator.ValidateAsync(request.CartItemDto);
+			var validator = new UpdateCartItemDtoValidator();
+			var validatorResult = await validator.ValidateAsync(request.CartItemDto);
 
-            if (validatorResult.IsValid == false)
-            {
-                throw new ValidationException(validatorResult);
-            }
+			if (validatorResult.IsValid == false)
+			{
+				throw new ValidationException(validatorResult);
+			}
 
-            var cartItem = await _unitOfWork.CartItemRepository.Get(request.CartItemDto.Id);
-
-
-            if (request.IsMinus == true && cartItem.Quantity > 0)
-            {
-                cartItem.Quantity--;
-            }
-            else if (request.IsMinus == false && cartItem.Quantity > 0)
-            {
-                cartItem.Quantity++;
-            }
+			var cartItem = await _unitOfWork.CartItemRepository.Get(request.CartItemDto.Id);
 
 
-            await _unitOfWork.CartItemRepository.Update(cartItem);
-            await _unitOfWork.Save();
+			if (request.IsMinus == true && cartItem.Quantity > 0)
+			{
+				cartItem.Quantity--;
+			}
+			else if (request.IsMinus == false && cartItem.Quantity > 0)
+			{
+				cartItem.Quantity++;
+			}
 
-            return Unit.Value;
-        }
-    }
+
+			await _unitOfWork.CartItemRepository.Update(cartItem);
+			await _unitOfWork.Save();
+
+			return Unit.Value;
+		}
+	}
 }

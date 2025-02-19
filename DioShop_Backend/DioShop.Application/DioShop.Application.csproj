@@ -17,43 +17,4 @@
     <ProjectReference Include="..\DioShop.Domain\DioShop.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Cart\Handlers\Commands\" />
-    <Folder Include="Features\Cart\Handlers\Queries\" />
-    <Folder Include="Features\Cart\Requests\Commands\" />
-    <Folder Include="Features\Cart\Requests\Queries\" />
-    <Folder Include="Features\Categories\Handlers\Commands\" />
-    <Folder Include="Features\Categories\Handlers\Queries\" />
-    <Folder Include="Features\Categories\Requests\Commands\" />
-    <Folder Include="Features\Categories\Requests\Queries\" />
-    <Folder Include="Features\Coupons\Handlers\Commands\" />
-    <Folder Include="Features\Coupons\Handlers\Queries\" />
-    <Folder Include="Features\Coupons\Requests\Commands\" />
-    <Folder Include="Features\Coupons\Requests\Queries\" />
-    <Folder Include="Features\Orders\Handlers\Commands\" />
-    <Folder Include="Features\Orders\Handlers\Queries\" />
-    <Folder Include="Features\Orders\Requests\Commands\" />
-    <Folder Include="Features\Orders\Requests\Queries\" />
-    <Folder Include="Features\ProductItems\Handlers\Commands\" />
-    <Folder Include="Features\ProductItems\Handlers\Queries\" />
-    <Folder Include="Features\ProductItems\Requests\Commands\" />
-    <Folder Include="Features\ProductItems\Requests\Queries\" />
-    <Folder Include="Features\Products\Handlers\Commands\" />
-    <Folder Include="Features\Products\Handlers\Queries\" />
-    <Folder Include="Features\Products\Requests\Commands\" />
-    <Folder Include="Features\Products\Requests\Queries\" />
-    <Folder Include="Features\ProductTags\Handlers\Commands\" />
-    <Folder Include="Features\ProductTags\Handlers\Queries\" />
-    <Folder Include="Features\ProductTags\Requests\Commands\" />
-    <Folder Include="Features\ProductTags\Requests\Queries\" />
-    <Folder Include="Features\ShippingMethods\Handlers\Commands\" />
-    <Folder Include="Features\ShippingMethods\Handlers\Queries\" />
-    <Folder Include="Features\ShippingMethods\Requests\Commands\" />
-    <Folder Include="Features\ShippingMethods\Requests\Queries\" />
-    <Folder Include="Features\Tags\Handlers\Commands\" />
-    <Folder Include="Features\Tags\Handlers\Queries\" />
-    <Folder Include="Features\Tags\Requests\Commands\" />
-    <Folder Include="Features\Tags\Requests\Queries\" />
-  </ItemGroup>
-
 </Project>

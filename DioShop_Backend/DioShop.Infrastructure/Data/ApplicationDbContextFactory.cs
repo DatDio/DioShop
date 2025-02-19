@@ -13,9 +13,10 @@ namespace DioShop.Infrastructure.Data
         public ApplicationDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionsBuilder.UseSqlServer("Server=DatDio\\SQLEXPRESS;Database=DioShop;User Id=sa;Password=Pain1103@@;TrustServerCertificate=True");
+			optionsBuilder.UseSqlServer("Server=DIO-BRANDO\\SQLEXPRESS;Database=DioShop;Trusted_Connection=True;TrustServerCertificate=True;");
 
-            return new ApplicationDbContext(optionsBuilder.Options);
+
+			return new ApplicationDbContext(optionsBuilder.Options);
         }
     }
 }
