@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+//admin header
 @Component({
   selector: 'app-header',
   imports: [],
