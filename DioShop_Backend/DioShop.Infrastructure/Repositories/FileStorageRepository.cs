@@ -1,8 +1,10 @@
 ﻿using DioShop.Application.Contracts.Infrastructure.IRepositories;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,11 +32,16 @@ namespace DioShop.Infrastructure.Repositories
 			return $"/{FOLDER_NAME}/{fileName}";
 		}
 
-		public async Task SaveFileAsync(Stream mediaBinaryStream, string fileName)
+		public async Task<string> SaveFileAsync(IFormFile file)
 		{
-			var filePath = Path.Combine(_pathFolder, fileName);
+            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
+            var filePath = Path.Combine(_pathFolder, fileName);
+
+
 			using var output = new FileStream(filePath, FileMode.Create);
-			await mediaBinaryStream.CopyToAsync(output);
-		}
+			await file.CopyToAsync(output);
+			return filePath;
+        }
 	}
 }

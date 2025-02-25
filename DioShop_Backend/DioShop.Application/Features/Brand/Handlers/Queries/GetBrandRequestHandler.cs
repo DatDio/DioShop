@@ -7,11 +7,12 @@ using AutoMapper;
 using DioShop.Application.Contracts.Infrastructure.IRepositories;
 using DioShop.Application.DTOs.Brand;
 using DioShop.Application.Features.Brand.Requests.Queries;
+using DioShop.Application.Ultils;
 using MediatR;
 
 namespace DioShop.Application.Features.Brand.Handlers.Queries
 {
-    public class GetBrandRequestHandler : IRequestHandler<GetBrandRequest, BrandDto>
+    public class GetBrandRequestHandler : IRequestHandler<GetBrandRequest, ApiResponse<BrandDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -22,10 +23,16 @@ namespace DioShop.Application.Features.Brand.Handlers.Queries
             _mapper = mapper;
         }
 
-        public async Task<BrandDto> Handle(GetBrandRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResponse<BrandDto>> Handle(GetBrandRequest request, CancellationToken cancellationToken)
         {
             var brand = await _unitOfWork.BrandRepository.Get(request.Id);
-            return _mapper.Map<BrandDto>(brand);
+            var brandDto = _mapper.Map<BrandDto>(brand);
+            return new ApiResponse<BrandDto>
+            {
+                Success = true,
+                Message = null,
+                Data = brandDto
+            };
         }
     }
 }

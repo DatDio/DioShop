@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DioShop.Application.Contracts.Infrastructure.IRepositories;
 using DioShop.Application.Features.Tags.Requests.Commands;
+using DioShop.Application.Ultils;
 using MediatR;
 
 namespace DioShop.Application.Features.Tags.Handlers.Commands
 {
-    public class DeleteTagCommandHandler : IRequestHandler<DeleteTagCommand, Unit>
+    public class DeleteTagCommandHandler : IRequestHandler<DeleteTagCommand, ApiResponse<object>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -21,17 +22,30 @@ namespace DioShop.Application.Features.Tags.Handlers.Commands
             _mapper = mapper;
         }
 
-        public async Task<Unit> Handle(DeleteTagCommand request, CancellationToken cancellationToken)
+        public async Task<ApiResponse<object>> Handle(DeleteTagCommand request, CancellationToken cancellationToken)
         {
-
             var tag = await _unitOfWork.TagRepository.Get(request.Id);
 
-
+            if (tag == null)
+            {
+                return new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "Tag not found",
+                    Data = null
+                };
+            }
 
             await _unitOfWork.TagRepository.Delete(tag);
             await _unitOfWork.Save();
 
-            return Unit.Value;
+            return new ApiResponse<object>
+            {
+                Success = true,
+                Message = "Tag deleted successfully",
+                Data = null
+            };
         }
     }
+
 }

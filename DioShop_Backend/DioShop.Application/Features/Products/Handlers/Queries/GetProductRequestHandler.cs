@@ -7,11 +7,12 @@ using AutoMapper;
 using DioShop.Application.Contracts.Infrastructure.IRepositories;
 using DioShop.Application.DTOs.Product;
 using DioShop.Application.Features.Products.Requests.Queries;
+using DioShop.Application.Ultils;
 using MediatR;
 
 namespace DioShop.Application.Features.Products.Handlers.Queries
 {
-    public class GetProductRequestHandler : IRequestHandler<GetProductRequest, ProductDto>
+    public class GetProductRequestHandler : IRequestHandler<GetProductRequest, ApiResponse<ProductDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -22,11 +23,28 @@ namespace DioShop.Application.Features.Products.Handlers.Queries
             _mapper = mapper;
         }
 
-        public async Task<ProductDto> Handle(GetProductRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResponse<ProductDto>> Handle(GetProductRequest request, CancellationToken cancellationToken)
         {
             var product = _unitOfWork.ProductRepository.GetProductWithProductItem(request.Id);
 
-            return _mapper.Map<ProductDto>(product);
+            if (product == null)
+            {
+                return new ApiResponse<ProductDto>
+                {
+                    Success = false,
+                    Message = $"Product with ID {request.Id} not found",
+                    Data = null
+                };
+            }
+
+            var productDto = _mapper.Map<ProductDto>(product);
+            return new ApiResponse<ProductDto>
+            {
+                Success = true,
+                Message = "Product retrieved successfully",
+                Data = productDto
+            };
         }
     }
+
 }

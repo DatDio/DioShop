@@ -8,8 +8,9 @@ using MediatR;
 
 namespace DioShop.Application.Features.CartItem.Requests.Commands
 {
-    public class CreateCartItemCommand : IRequest<int>
+    public class CreateCartItemCommand : IRequest<CartItemDto>
     {
         public CreateCartItemDto CartItemDto { get; set; }
     }
+
 }

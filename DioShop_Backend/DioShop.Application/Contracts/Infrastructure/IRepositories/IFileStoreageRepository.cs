@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace DioShop.Application.Contracts.Infrastructure.IRepositories
 {
@@ -10,7 +11,7 @@ namespace DioShop.Application.Contracts.Infrastructure.IRepositories
 	{
 		string GetFileUrl(string fileName);
 
-		Task SaveFileAsync(Stream mediaBinaryStream, string fileName);
+		Task<string> SaveFileAsync(IFormFile file );
 
 		Task DeleteFileAsync(string fileName);
 	}

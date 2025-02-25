@@ -14,14 +14,17 @@ using DioShop.Application.Models;
 using System.Security.Claims;
 using DioShop.Application.Exceptions;
 using DioShop.Domain.Entities;
+using DioShop.Application.DTOs.Brand;
+using DioShop.Application.Ultils;
 namespace DioShop.Application.Features.Brand.Handlers.Commands
 {
-    public class CreateBrandCommandHandler : IRequestHandler<CreateBrandCommand, int>
+    public class CreateBrandCommandHandler : IRequestHandler<CreateBrandCommand, ApiResponse<BrandDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEmailSender _emailSender;
         private readonly IMapper _mapper;
+
         public CreateBrandCommandHandler(IUnitOfWork unitOfWork,
             IMapper mapper,
             IEmailSender emailSender,
@@ -32,35 +35,35 @@ namespace DioShop.Application.Features.Brand.Handlers.Commands
             _httpContextAccessor = httpContextAccessor;
             _emailSender = emailSender;
         }
-        public async Task<int> Handle(CreateBrandCommand request,
-            CancellationToken cancellationToken)
+
+        public async Task<ApiResponse<BrandDto>> Handle(CreateBrandCommand request, CancellationToken cancellationToken)
         {
             var validator = new CreateBrandDtoValidator();
             var validatorResult = await validator.ValidateAsync(request.BrandDto);
 
-            if (validatorResult.IsValid == false)
+            if (!validatorResult.IsValid)
             {
-                throw new ValidationException(validatorResult);
+                return new ApiResponse<BrandDto>
+                {
+                    Success = false,
+                    Message = "Validation failed",
+                    Data = null
+                };
             }
+
             var brand = _mapper.Map<DioShop.Domain.Entities.Brand>(request.BrandDto);
             brand = await _unitOfWork.BrandRepository.Add(brand);
             await _unitOfWork.Save();
 
+            var brandDto = _mapper.Map<BrandDto>(brand);
 
-            //var emailAddress = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value;
-
-            //var email = new Email
-            //{
-            //    To = "hieucobappp@gmail.com",
-            //    Body = $"Created" +
-            //        $"successfully.",
-            //    Subject = "Test email"
-            //};
-
-            //await _emailSender.SendEmail(email);
-
-
-            return brand.Id;
+            return new ApiResponse<BrandDto>
+            {
+                Success = true,
+                Message = "Brand created successfully",
+                Data = brandDto
+            };
         }
     }
+
 }

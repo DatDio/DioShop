@@ -7,11 +7,12 @@ using AutoMapper;
 using DioShop.Application.Contracts.Infrastructure.IRepositories;
 using DioShop.Application.DTOs.ProductTag;
 using DioShop.Application.Features.ProductTags.Requests.Queries;
+using DioShop.Application.Ultils;
 using MediatR;
 
 namespace DioShop.Application.Features.ProductTags.Handlers.Queries
 {
-    public class GetProductTagRequestHandler : IRequestHandler<GetProductTagRequest, ProductTagDto>
+    public class GetProductTagRequestHandler : IRequestHandler<GetProductTagRequest, ApiResponse<ProductTagDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -22,10 +23,24 @@ namespace DioShop.Application.Features.ProductTags.Handlers.Queries
             _mapper = mapper;
         }
 
-        public async Task<ProductTagDto> Handle(GetProductTagRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResponse<ProductTagDto>> Handle(GetProductTagRequest request, CancellationToken cancellationToken)
         {
             var hold = await _unitOfWork.ProductTagRepository.Get(request.Id);
-            return _mapper.Map<ProductTagDto>(hold);
+            if (hold == null)
+            {
+                return new ApiResponse<ProductTagDto>
+                {
+                    Success = false,
+                    Message = "Product tag not found",
+                    Data = null
+                };
+            }
+
+            return new ApiResponse<ProductTagDto>
+            {
+                Success = true,
+                Data = _mapper.Map<ProductTagDto>(hold)
+            };
         }
     }
 }

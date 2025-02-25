@@ -5,15 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using DioShop.Application.Contracts.Infrastructure.IRepositories;
+using DioShop.Application.DTOs.Product;
 using DioShop.Application.DTOs.Product.Validators;
 using DioShop.Application.Exceptions;
 using DioShop.Application.Features.Products.Requests.Commands;
+using DioShop.Application.Ultils;
 using DioShop.Domain.Entities;
 using MediatR;
 
 namespace DioShop.Application.Features.Products.Handlers.Commands
 {
-    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, int>
+    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, ApiResponse<ProductDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -24,21 +26,47 @@ namespace DioShop.Application.Features.Products.Handlers.Commands
             _mapper = mapper;
         }
 
-        public async Task<int> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+        public async Task<ApiResponse<ProductDto>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
             var validator = new CreateProductDtoValidator(_unitOfWork.BrandRepository, _unitOfWork.CategoryRepository);
             var validatorResult = await validator.ValidateAsync(request.ProductDto);
 
-            if (validatorResult.IsValid == false)
+            if (!validatorResult.IsValid)
             {
-                throw new ValidationException(validatorResult);
+                return new ApiResponse<ProductDto>
+                {
+                    Success = false,
+                    Message = "Validation failed",
+                    Data = null
+                };
             }
-
+            var saveImage = _unitOfWork.FileStoreageRepository.SaveFileAsync(request.ProductDto.Image);
             var product = _mapper.Map<Product>(request.ProductDto);
-            product = await _unitOfWork.ProductRepository.Add(product);
-            await _unitOfWork.Save();
+            try
+            {
+                product = await _unitOfWork.ProductRepository.Add(product);
+                await _unitOfWork.Save();
 
-            return product.Id;
+                var createdProductDto = _mapper.Map<ProductDto>(product);
+
+                return new ApiResponse<ProductDto>
+                {
+                    Success = true,
+                    Message = "Product created successfully",
+                    Data = createdProductDto
+                };
+            }
+            catch
+            {
+
+            }
+            return new ApiResponse<ProductDto>
+            {
+                Success = false,
+                Message = " failed",
+                Data = null
+            };
         }
     }
+
 }

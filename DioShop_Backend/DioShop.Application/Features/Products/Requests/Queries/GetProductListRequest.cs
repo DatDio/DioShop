@@ -8,7 +8,7 @@ using MediatR;
 
 namespace DioShop.Application.Features.Products.Requests.Queries
 {
-    public class GetProductListRequest : IRequest<PagedResult>
+    public class GetProductListRequest : IRequest<ApiResponse<PagedResult>>
     {
         public int? CategoryId { get; set; }
         public string? SearchTerm { get; set; }

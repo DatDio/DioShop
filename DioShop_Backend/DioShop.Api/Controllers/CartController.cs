@@ -35,7 +35,7 @@ namespace DioShop.Api.Controllers
 		public async Task<ActionResult> AddToCart([FromBody] CreateCartItemDto createCartItemDto)
 		{
 			var cart = await _mediator.Send(new GetCartRequest());
-			if (cart.Id != createCartItemDto.CartId)
+			if (cart.Data.Id != createCartItemDto.CartId)
 			{
 				return BadRequest("Something went wrong");
 			}

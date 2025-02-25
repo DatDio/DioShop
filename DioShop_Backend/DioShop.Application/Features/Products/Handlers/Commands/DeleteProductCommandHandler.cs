@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DioShop.Application.Contracts.Infrastructure.IRepositories;
 using DioShop.Application.Features.Products.Requests.Commands;
+using DioShop.Application.Ultils;
 using MediatR;
 
 namespace DioShop.Application.Features.Products.Handlers.Commands
 {
-    public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand, Unit>
+    public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand, ApiResponse<object>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -21,17 +22,29 @@ namespace DioShop.Application.Features.Products.Handlers.Commands
             _mapper = mapper;
         }
 
-        public async Task<Unit> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
+        public async Task<ApiResponse<object>> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
         {
+            var product = await _unitOfWork.ProductRepository.Get(request.Id);
+            if (product == null)
+            {
+                return new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "Product not found",
+                    Data = null
+                };
+            }
 
-            var coupon = await _unitOfWork.ProductRepository.Get(request.Id);
-
-
-
-            await _unitOfWork.ProductRepository.Delete(coupon);
+            await _unitOfWork.ProductRepository.Delete(product);
             await _unitOfWork.Save();
 
-            return Unit.Value;
+            return new ApiResponse<object>
+            {
+                Success = true,
+                Message = "Product deleted successfully",
+                Data = null
+            };
         }
     }
+
 }

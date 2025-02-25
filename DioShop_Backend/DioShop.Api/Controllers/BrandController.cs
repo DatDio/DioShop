@@ -50,9 +50,9 @@ namespace DioShop.Api.Controllers
         public async Task<ActionResult> Put([FromBody] UpdateBrandDto brandDto)
         {
             var command = new UpdateBrandCommand { BrandDto = brandDto };
-            await _mediator.Send(command);
+            var response = await _mediator.Send(command);
 
-            return NoContent();
+            return Ok(response);
         }
 
         [HttpDelete]
@@ -61,9 +61,9 @@ namespace DioShop.Api.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             var command = new DeleteBrandCommand { Id = id };
-            await _mediator.Send(command);
+            var response = await _mediator.Send(command);
 
-            return NoContent();
+            return Ok(response);
         }
     }
 }

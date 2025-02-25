@@ -1,4 +1,5 @@
 ﻿using DioShop.Application.Exceptions;
+using DioShop.Application.Ultils;
 using Newtonsoft.Json;
 using System.Net;
 
@@ -56,10 +57,10 @@ namespace DioShop.Api.Middlewares
             }
 
             // Định dạng phản hồi JSON
-            var response = new ErrorDetails
+            var response = new ApiResponse<object>
             {
-                ErrorType = errorType,
-                ErrorMessage = errorMessage
+                Success = false,
+                Message = errorMessage
             };
 
             var result = JsonConvert.SerializeObject(response);

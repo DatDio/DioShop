@@ -8,12 +8,13 @@ using DioShop.Application.Contants;
 using DioShop.Application.Contracts.Infrastructure.IRepositories;
 using DioShop.Application.DTOs.Cart;
 using DioShop.Application.Features.Cart.Requests.Queries;
+using DioShop.Application.Ultils;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
 namespace DioShop.Application.Features.Cart.Handlers.Queries
 {
-    public class GetCartRequestHandler : IRequestHandler<GetCartRequest, CartDto>
+    public class GetCartRequestHandler : IRequestHandler<GetCartRequest, ApiResponse<CartDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -24,16 +25,39 @@ namespace DioShop.Application.Features.Cart.Handlers.Queries
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
-
         }
 
-        public async Task<CartDto> Handle(GetCartRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResponse<CartDto>> Handle(GetCartRequest request, CancellationToken cancellationToken)
         {
-            var userId = _httpContextAccessor.HttpContext.User.FindFirst(CustomClaimTypes.Uid).Value;
+            var userId = _httpContextAccessor.HttpContext?.User?.FindFirst(CustomClaimTypes.Uid)?.Value;
 
+            if (string.IsNullOrEmpty(userId))
+            {
+                return new ApiResponse<CartDto>
+                {
+                    Success = false,
+                    Message = "User not authenticated"
+                };
+            }
 
             var cart = await _unitOfWork.CartRepository.GetCartByUserId(userId);
-            return _mapper.Map<CartDto>(cart);
+
+            if (cart == null)
+            {
+                return new ApiResponse<CartDto>
+                {
+                    Success = false,
+                    Message = "Cart not found"
+                };
+            }
+
+            return new ApiResponse<CartDto>
+            {
+                Success = true,
+                Message = "Cart retrieved successfully",
+                Data = _mapper.Map<CartDto>(cart)
+            };
         }
     }
+
 }

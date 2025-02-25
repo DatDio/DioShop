@@ -13,7 +13,7 @@ using MediatR;
 
 namespace DioShop.Application.Features.Products.Handlers.Queries
 {
-    public class GetListProductRequestHandler : IRequestHandler<GetProductListRequest, PagedResult>
+    public class GetListProductRequestHandler : IRequestHandler<GetProductListRequest, ApiResponse<PagedResult>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -24,15 +24,22 @@ namespace DioShop.Application.Features.Products.Handlers.Queries
             _mapper = mapper;
         }
 
-        public async Task<PagedResult> Handle(GetProductListRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResponse<PagedResult>> Handle(GetProductListRequest request, CancellationToken cancellationToken)
         {
-
             var products = _unitOfWork.ProductRepository.GetProductsWithProductItem(request.SearchTerm, request.CategoryId);
 
-            PagedResult result = CommonUtility.ApplyPaging<Product>(request.Page, request.PageSize, products);
+            var pagedResult = CommonUtility.ApplyPaging<Product>(request.Page, request.PageSize, products);
 
-            result.Items = _mapper.Map<List<ProductDto>>(result.Items);
-            return result;
+            // Cập nhật Items thành danh sách ProductDto
+            pagedResult.Items = _mapper.Map<List<ProductDto>>(pagedResult.Items);
+
+            return new ApiResponse<PagedResult>
+            {
+                Success = true,
+                Message = "Products retrieved successfully",
+                Data = pagedResult
+            };
         }
     }
+
 }
