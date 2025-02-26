@@ -1,4 +1,5 @@
-﻿using DioShop.Application.Ultils;
+﻿using DioShop.Application.DTOs.ChatMessage;
+using DioShop.Application.Ultils;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,6 @@ namespace DioShop.Application.Features.Chats.Requests.Commands
 {
 	public class SendMessageCommand : IRequest<ApiResponse<bool>>
 	{
-		public string SenderId { get; set; }
-		public string ReceiverId { get; set; }
-		public string Message { get; set; }
-	}
+        public CreateMessageDto MessageDto { get; set; }
+    }
 }

@@ -13,7 +13,6 @@ namespace DioShop.Domain.Entities
 		public string SenderId { get; set; } // ID người gửi
 		public string ReceiverId { get; set; } // ID người nhận
 		public string Message { get; set; } // Nội dung tin nhắn
-		public DateTime Timestamp { get; set; } = DateTime.UtcNow; // Thời gian gửi
 
 		public bool IsRead { get; set; } = false; // Đã đọc hay chưa
 	}

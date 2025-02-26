@@ -1,4 +1,5 @@
-﻿using DioShop.Application.Ultils;
+﻿using DioShop.Application.DTOs.ChatMessage;
+using DioShop.Application.Ultils;
 using DioShop.Domain.Entities;
 using MediatR;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DioShop.Application.Features.Chats.Requests.Queries
 {
-	public class GetChatHistoryQuery : IRequest<ApiResponse<List<ChatMessage>>>
+	public class GetChatHistoryRequest : IRequest<ApiResponse<List<MessageDto>>>
 	{
 		public string SenderId { get; set; }
 		public string ReceiverId { get; set; }
