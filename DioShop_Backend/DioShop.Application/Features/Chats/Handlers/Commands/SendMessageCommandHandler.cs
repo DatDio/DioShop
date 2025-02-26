@@ -32,7 +32,7 @@ namespace DioShop.Application.Features.Chats.Handlers.Commands
 					Timestamp = DateTime.UtcNow
 				};
 
-				//await _unitOfWork.ChatMessageRepository.;
+				await _unitOfWork.ChatMessageRepository.Add(chatMessage);
 				await _unitOfWork.Save();
 				return new ApiResponse<bool>
 				{
