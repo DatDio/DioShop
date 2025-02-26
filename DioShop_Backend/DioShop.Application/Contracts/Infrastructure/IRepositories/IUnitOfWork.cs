@@ -30,9 +30,10 @@ namespace DioShop.Application.Contracts.Infrastructure.IRepositories
         ITagRepository TagRepository { get; }
         IShippingMethodRepository ShippingMethodRepository { get; }
         ICartRepository CartRepository { get; }
-        IFileStoreageRepository FileStoreageRepository { get; }
+		IFileStoreageRepository FileStoreageRepository { get; }
+		IChatMessageRepository ChatMessageRepository { get; }
 
 
-        Task Save();
+		Task Save();
     }
 }

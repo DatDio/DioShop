@@ -45,8 +45,6 @@ namespace DioShop.Infrastructure
 			services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 			{
 				options.SignIn.RequireConfirmedAccount = false;
-
-				
 				options.Password.RequireDigit = false; 
 				options.Password.RequireLowercase = false; 
 				options.Password.RequireUppercase = false; 

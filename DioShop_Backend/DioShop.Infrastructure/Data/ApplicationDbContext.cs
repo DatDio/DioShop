@@ -29,6 +29,7 @@ namespace DioShop.Infrastructure.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductTag> ProductTags { get; set; }
         public DbSet<ProductItem> ProductItems { get; set; }
+        public DbSet<ChatMessage> ChatMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

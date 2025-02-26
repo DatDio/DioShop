@@ -47,7 +47,12 @@ namespace DioShop.Infrastructure.Repositories
         public ICategoryRepository CategoryRepository =>
             _categoryRepository ??= new CategoryRepository(_context);
 
-        private ICartItemRepository _cartItemRepository;
+
+		private IChatMessageRepository _chatMessageRepository;
+		public IChatMessageRepository ChatMessageRepository =>
+			_chatMessageRepository ??= new ChatMessageRepository(_context);
+
+		private ICartItemRepository _cartItemRepository;
         public ICartItemRepository CartItemRepository =>
             _cartItemRepository ??= new CartItemRepository(_context);
 
