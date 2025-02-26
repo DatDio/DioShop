@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DioShop.Application.Contracts.Infrastructure.IRepositories
 {
-	public interface IChatMessageRepository
+	public interface IChatMessageRepository : IGenericRepository<ChatMessage>
 	{
 		Task<IEnumerable<ChatMessage>> GetMessagesAsync(string senderId, string receiverId);
 	}

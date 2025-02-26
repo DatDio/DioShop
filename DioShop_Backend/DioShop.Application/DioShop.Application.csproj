@@ -18,9 +18,4 @@
     <ProjectReference Include="..\DioShop.Domain\DioShop.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Chats\Handlers\Queries\" />
-    <Folder Include="Features\Chats\Requests\Queries\" />
-  </ItemGroup>
-
 </Project>
