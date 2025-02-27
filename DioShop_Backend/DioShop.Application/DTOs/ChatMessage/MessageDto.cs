@@ -9,8 +9,10 @@ namespace DioShop.Application.DTOs.ChatMessage
 {
     public class MessageDto : BaseDto
     {
-        public string SenderId { get; set; }
-        public string ReceiverId { get; set; }
+        public string UserId { get; set; } // Ai gửi tin nhắn
         public string Message { get; set; }
+        public bool IsFromAdmin { get; set; }
+        public bool IsRead { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

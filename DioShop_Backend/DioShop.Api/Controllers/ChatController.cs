@@ -1,4 +1,5 @@
-﻿using DioShop.Application.Contracts.Infrastructure.IRepositories;
+﻿using DioShop.Application.Contants;
+using DioShop.Application.Contracts.Infrastructure.IRepositories;
 using DioShop.Application.DTOs.Brand;
 using DioShop.Application.DTOs.ChatMessage;
 using DioShop.Application.Features.Brand.Requests.Queries;
@@ -25,19 +26,28 @@ namespace DioShop.Api.Controllers
             _mediator = mediator;
         }
 
+        [HttpGet("admin/history")]
+        [Authorize(Roles = Role.RoleAdmin)] // Chỉ user đã đăng nhập mới xem được tin nhắn
+        public async Task<ActionResult<List<MessageDto>>> AdminGetChatHistory()
+        {
+            //var senderId = User.Identity.Name; // Lấy ID của người gửi từ token
+          
+            //var messages = await _chatMessageRepository.GetMessagesAsync(senderId, receiverId);
+
+            //return Ok(messages);
+            var messages = await _mediator.Send(new AdminGetChatHistoryRequest());
+            return Ok(messages);
+        }
+
         [HttpGet("history")]
         [Authorize] // Chỉ user đã đăng nhập mới xem được tin nhắn
         public async Task<ActionResult<List<MessageDto>>> GetChatHistory(string receiverId)
         {
-            var senderId = User.Identity.Name; // Lấy ID của người gửi từ token
+            //var senderId = User.Identity.Name; // Lấy ID của người gửi từ token
             //var messages = await _chatMessageRepository.GetMessagesAsync(senderId, receiverId);
 
             //return Ok(messages);
-            var messages = await _mediator.Send(new GetChatHistoryRequest
-            {
-                SenderId = senderId,
-                ReceiverId = receiverId
-            });
+            var messages = await _mediator.Send(new GetChatHistoryRequest());
             return Ok(messages);
         }
 

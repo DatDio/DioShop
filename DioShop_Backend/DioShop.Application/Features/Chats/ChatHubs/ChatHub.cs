@@ -1,6 +1,9 @@
-﻿using DioShop.Application.DTOs.ChatMessage;
+﻿using DioShop.Application.Contants;
+using DioShop.Application.DTOs.ChatMessage;
 using DioShop.Application.Features.Chats.Requests.Commands;
+using DioShop.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
@@ -10,31 +13,29 @@ using System.Threading.Tasks;
 
 namespace DioShop.Application.Features.Chats.ChatHubs
 {
-	public class ChatHub : Hub
-	{
-		private readonly IMediator _mediator;
+    public class ChatHub : Hub
+    {
+        private readonly IMediator _mediator;
+        private readonly UserManager<ApplicationUser> _userManager;
+        public ChatHub(IMediator mediator, UserManager<ApplicationUser> userManager)
+        {
+            _mediator = mediator;
+            _userManager = userManager;
+        }
 
-		public ChatHub(IMediator mediator)
-		{
-			_mediator = mediator;
-		}
-
-		public async Task SendMessage(CreateMessageDto request)
-		{
-			var senderId = Context.UserIdentifier; // Lấy ID người gửi từ token
-
-			//if (string.IsNullOrEmpty(senderId) || string.IsNullOrEmpty(receiverId) || string.IsNullOrEmpty(message))
-			//	return;
-
-			
+        public async Task SendMessage(CreateMessageDto request)
+        {
             var command = new SendMessageCommand { MessageDto = request };
-                var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command);
 
             if (result.Success)
-			{
-				// Gửi tin nhắn đến người nhận thông qua SignalR
-				await Clients.User(request.ReceiverId).SendAsync("ReceiveMessage", senderId, request.Message);
-			}
-		}
-	}
+            {
+                // Gửi tin nhắn đến cả admin và user (vì chỉ có 1 user và 1 admin)
+                await Clients.User(request.UserId).SendAsync("ReceiveMessage", request.Message, request.IsFromAdmin);
+                await Clients.User("Admin").SendAsync("ReceiveMessage", request.Message, request.IsFromAdmin);
+            }
+        }
+
+    }
+
 }

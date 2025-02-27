@@ -1,6 +1,9 @@
-﻿using DioShop.Application.Contracts.Infrastructure.IRepositories;
+﻿using DioShop.Application.Contants;
+using DioShop.Application.Contracts.Infrastructure.IRepositories;
+using DioShop.Application.DTOs.ChatMessage;
 using DioShop.Domain.Entities;
 using DioShop.Infrastructure.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,21 +16,56 @@ namespace DioShop.Infrastructure.Repositories
     public class ChatMessageRepository : GenericRepository<ChatMessage>, IChatMessageRepository
     {
         private readonly ApplicationDbContext _dbContext;
-
-        public ChatMessageRepository(ApplicationDbContext dbContext) : base(dbContext)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public ChatMessageRepository(ApplicationDbContext dbContext,
+            UserManager<ApplicationUser> userManager) : base(dbContext)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
         }
 
-        public async Task<IEnumerable<ChatMessage>> GetMessagesAsync(string senderId,
-            string receiverId)
+        public async Task<IEnumerable<ChatMessage>> GetAllMessagesByAdminAsync()
         {
-            return await _dbContext.ChatMessages
-                .Where(m => (m.SenderId == senderId && m.ReceiverId == receiverId) ||
-                            (m.SenderId == receiverId && m.ReceiverId == senderId))
-                .OrderBy(m => m.CreatedBy)
+            // Lấy admin
+            var adminUser = await _userManager.Users
+                .Where(u => _userManager.IsInRoleAsync(u, Role.RoleAdmin).Result)
+                .FirstOrDefaultAsync();
+
+            if (adminUser == null) return new List<ChatMessage>();
+
+            var adminId = adminUser.Id;
+
+            // Lấy tin nhắn giữa admin và user, kèm thông tin user
+            var messages = await _dbContext.ChatMessages
+                .Include(m => m.User) // Lấy thông tin người gửi
+                .Where(m => m.UserId != null) // Đảm bảo không có UserId null
+                .OrderByDescending(m => m.CreatedAt)
                 .ToListAsync();
+
+            return messages;
         }
+
+
+        public async Task<IEnumerable<ChatMessage>> GetMessagesByUserAsync(string userId)
+        {
+            var adminUser = await _userManager.Users
+                .Where(u => _userManager.IsInRoleAsync(u, Role.RoleAdmin).Result)
+                .FirstOrDefaultAsync();
+
+            if (adminUser == null) return new List<ChatMessage>();
+
+            var adminId = adminUser.Id;
+
+            // Lấy tin nhắn giữa admin và user cụ thể
+            var messages = await _dbContext.ChatMessages
+                .Include(m => m.User) // Lấy thông tin User
+                .Where(m => (m.UserId == userId || m.UserId == adminId)) // Lọc theo user hoặc admin
+                .OrderBy(m => m.CreatedAt)
+                .ToListAsync();
+
+            return messages;
+        }
+
     }
 
 }

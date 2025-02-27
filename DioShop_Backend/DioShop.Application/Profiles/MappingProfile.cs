@@ -8,6 +8,7 @@ using DioShop.Application.DTOs.Brand;
 using DioShop.Application.DTOs.Cart;
 using DioShop.Application.DTOs.CartItem;
 using DioShop.Application.DTOs.Category;
+using DioShop.Application.DTOs.ChatMessage;
 using DioShop.Application.DTOs.Coupon;
 using DioShop.Application.DTOs.Order;
 using DioShop.Application.DTOs.OrderItem;
@@ -44,6 +45,9 @@ namespace DioShop.Application.Profiles
             CreateMap<Category, CategoryDto>().ReverseMap();
             CreateMap<Category, CreateCategoryDto>().ReverseMap();
             CreateMap<Category, UpdateCategoryDto>().ReverseMap();
+
+            CreateMap<ChatMessage, CreateMessageDto>().ReverseMap();
+            CreateMap<ChatMessage, MessageDto>().ReverseMap();
 
             CreateMap<ShippingMethod, ShippingMethodDto>().ReverseMap();
             CreateMap<ShippingMethod, CreateShippingMethodDto>().ReverseMap();
@@ -99,6 +103,8 @@ namespace DioShop.Application.Profiles
                   QuantityInStock = item.QuantityInStock,
                   Price = item.Price,
               })));
+
+          
 
             CreateMap<Product, CreateProductDto>().ReverseMap();
             CreateMap<Product, UpdateProductDto>().ReverseMap();

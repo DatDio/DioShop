@@ -9,8 +9,8 @@ namespace DioShop.Application.DTOs.ChatMessage
 {
     public class CreateMessageDto : BaseDto
     {
-        public string SenderId { get; set; }
-        public string ReceiverId { get; set; }
-        public string Message { get; set; }
+        public string UserId { get; set; } // Ai gửi tin nhắn
+        public string Message { get; set; } // Nội dung tin nhắn
+        public bool IsFromAdmin { get; set; } // Kiểm tra tin nhắn từ admin
     }
 }

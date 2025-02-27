@@ -12,7 +12,6 @@ namespace DioShop.Application.Features.Chats.Requests.Queries
 {
 	public class GetChatHistoryRequest : IRequest<ApiResponse<List<MessageDto>>>
 	{
-		public string SenderId { get; set; }
-		public string ReceiverId { get; set; }
+		
 	}
 }

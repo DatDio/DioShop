@@ -10,10 +10,12 @@ namespace DioShop.Domain.Entities
 {
 	public class ChatMessage : BaseDomainEntity
 	{
-		public string SenderId { get; set; } // ID người gửi
-		public string ReceiverId { get; set; } // ID người nhận
-		public string Message { get; set; } // Nội dung tin nhắn
+        public string UserId { get; set; }  // Khóa ngoại đến bảng Account/ApplicationUser
 
-		public bool IsRead { get; set; } = false; // Đã đọc hay chưa
-	}
+        public virtual ApplicationUser User { get; set; } 
+
+        public string Message { get; set; }
+        public bool IsFromAdmin { get; set; }
+        public bool IsRead { get; set; } = false;
+    }
 }

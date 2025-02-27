@@ -9,6 +9,8 @@ namespace DioShop.Application.Contracts.Infrastructure.IRepositories
 {
 	public interface IChatMessageRepository : IGenericRepository<ChatMessage>
 	{
-		Task<IEnumerable<ChatMessage>> GetMessagesAsync(string senderId, string receiverId);
-	}
+		Task<IEnumerable<ChatMessage>> GetMessagesByUserAsync(string userID);
+
+        Task<IEnumerable<ChatMessage>> GetAllMessagesByAdminAsync();
+    }
 }
