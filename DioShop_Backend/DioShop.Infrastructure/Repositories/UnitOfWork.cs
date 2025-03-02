@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DioShop.Application.Contracts.Infrastructure.IRepositories;
+using DioShop.Domain.Entities;
 using DioShop.Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DioShop.Infrastructure.Repositories
@@ -16,15 +18,18 @@ namespace DioShop.Infrastructure.Repositories
         private readonly IHttpContextAccessor _httpContextAccessor;
         private IDbContextTransaction _objTran;
 		private readonly IFileStoreageRepository _fileStoreageRepository;
-		// Constructor nhận DI
-		public UnitOfWork(ApplicationDbContext context,
+        private readonly UserManager<ApplicationUser> _userManager;
+        // Constructor nhận DI
+        public UnitOfWork(ApplicationDbContext context,
 						  IHttpContextAccessor httpContextAccessor,
-						  IFileStoreageRepository fileStoreageRepository)
+						  IFileStoreageRepository fileStoreageRepository,
+                          UserManager<ApplicationUser> userManager)
 		{
 			_context = context;
 			_httpContextAccessor = httpContextAccessor;
 			_fileStoreageRepository = fileStoreageRepository;
-		}
+            _userManager = userManager;
+        }
 
 		private ICouponRepository _couponRepository;
 
@@ -50,7 +55,7 @@ namespace DioShop.Infrastructure.Repositories
 
 		private IChatMessageRepository _chatMessageRepository;
 		public IChatMessageRepository ChatMessageRepository =>
-			_chatMessageRepository ??= new ChatMessageRepository(_context);
+			_chatMessageRepository ??= new ChatMessageRepository(_context, _userManager);
 
 		private ICartItemRepository _cartItemRepository;
         public ICartItemRepository CartItemRepository =>

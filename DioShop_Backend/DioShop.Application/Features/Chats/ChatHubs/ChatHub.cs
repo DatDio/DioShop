@@ -31,8 +31,8 @@ namespace DioShop.Application.Features.Chats.ChatHubs
             if (result.Success)
             {
                 // Gửi tin nhắn đến cả admin và user (vì chỉ có 1 user và 1 admin)
-                await Clients.User(request.UserId).SendAsync("ReceiveMessage", request.Message, request.IsFromAdmin);
-                await Clients.User("Admin").SendAsync("ReceiveMessage", request.Message, request.IsFromAdmin);
+                await Clients.User(request.UserId).SendAsync("ReceiveMessage", request.Message );
+                await Clients.User("Admin").SendAsync("ReceiveMessage", request.Message);
             }
         }
 

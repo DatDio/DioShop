@@ -39,6 +39,7 @@ namespace DioShop.Application.Features.Categories.Handlers.Commands
             try
             {
                 var category = _mapper.Map<Category>(request.CategoryDto);
+                category.ImageUrl = "sfgsgsg";
                 category = await _unitOfWork.CategoryRepository.Add(category);
                 await _unitOfWork.Save();
 

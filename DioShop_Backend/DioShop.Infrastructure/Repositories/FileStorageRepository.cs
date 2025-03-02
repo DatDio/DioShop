@@ -18,30 +18,36 @@ namespace DioShop.Infrastructure.Repositories
 		{
 			_pathFolder = Path.Combine(webHostEnvironment.WebRootPath, FOLDER_NAME);
 		}
-		public async Task DeleteFileAsync(string fileName)
-		{
-			var filePath = Path.Combine(_pathFolder, fileName);
-			if (File.Exists(filePath))
-			{
-				await Task.Run(() => File.Delete(filePath));
-			}	
-		}
+        public async Task DeleteFileAsync(string fileName)
+        {
+            // Nếu fileName là đường dẫn tương đối, lấy tên file
+            var extractedFileName = Path.GetFileName(fileName);
+            var filePath = Path.Combine(_pathFolder, extractedFileName);
+            if (File.Exists(filePath))
+            {
+                await Task.Run(() => File.Delete(filePath));
+            }
+        }
 
-		public string GetFileUrl(string fileName)
+        public string GetFileUrl(string fileName)
 		{
 			return $"/{FOLDER_NAME}/{fileName}";
 		}
 
-		public async Task<string> SaveFileAsync(IFormFile file)
-		{
+        public async Task<string> SaveFileAsync(IFormFile file)
+        {
+            // Lấy tên file gốc và tạo tên file mới dựa trên Guid
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
             var filePath = Path.Combine(_pathFolder, fileName);
 
+            // Lưu file vào thư mục trên server
+            using var output = new FileStream(filePath, FileMode.Create);
+            await file.CopyToAsync(output);
 
-			using var output = new FileStream(filePath, FileMode.Create);
-			await file.CopyToAsync(output);
-			return filePath;
+          
+            var relativeUrl = $"/{FOLDER_NAME}/{fileName}";
+            return relativeUrl;
         }
-	}
+    }
 }

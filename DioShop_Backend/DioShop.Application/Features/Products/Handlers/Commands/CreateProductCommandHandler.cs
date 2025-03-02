@@ -40,7 +40,7 @@ namespace DioShop.Application.Features.Products.Handlers.Commands
                     Data = null
                 };
             }
-            var saveImage = _unitOfWork.FileStoreageRepository.SaveFileAsync(request.ProductDto.Image);
+            request.ProductDto.ImageUrl = await _unitOfWork.FileStoreageRepository.SaveFileAsync(request.ProductDto.Image);
             var product = _mapper.Map<Product>(request.ProductDto);
             try
             {
@@ -58,6 +58,7 @@ namespace DioShop.Application.Features.Products.Handlers.Commands
             }
             catch
             {
+                await _unitOfWork.FileStoreageRepository.DeleteFileAsync(request.ProductDto.ImageUrl);
 
             }
             return new ApiResponse<ProductDto>
