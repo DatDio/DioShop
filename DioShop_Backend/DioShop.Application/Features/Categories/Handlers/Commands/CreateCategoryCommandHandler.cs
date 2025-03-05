@@ -32,36 +32,58 @@ namespace DioShop.Application.Features.Categories.Handlers.Commands
             var validator = new CreateCategoryDtoValidator();
             var validatorResult = await validator.ValidateAsync(request.CategoryDto);
 
-            if (validatorResult.IsValid == false)
+            if (!validatorResult.IsValid)
             {
                 throw new ValidationException(validatorResult);
             }
+
+            Category category = null; // Khai báo category trước để tránh lỗi trong catch
+
             try
             {
-                var category = _mapper.Map<Category>(request.CategoryDto);
-                category.ImageUrl = "sfgsgsg";
+                // Ánh xạ DTO sang Entity
+                category = _mapper.Map<Category>(request.CategoryDto);
+
+                // Upload ảnh
+                category.ImageUrl = await _unitOfWork.FileStoreageRepository.SaveFileAsync(request.CategoryDto.Image);
+                if (string.IsNullOrEmpty(category.ImageUrl))
+                {
+                    return new ApiResponse<CategoryDto>
+                    {
+                        Success = false,
+                        Message = "Cannot upload image",
+                        Data = null
+                    };
+                }
+
+                // Thêm vào database
                 category = await _unitOfWork.CategoryRepository.Add(category);
                 await _unitOfWork.Save();
 
-                //return category.Id;
                 return new ApiResponse<CategoryDto>
                 {
                     Success = true,
                     Message = "Category created successfully",
                     Data = _mapper.Map<CategoryDto>(category)
                 };
-
             }
-            catch
+            catch (Exception ex)
             {
+                // Nếu có lỗi và đã upload ảnh, thì xóa ảnh
+                if (category != null && !string.IsNullOrEmpty(category.ImageUrl))
+                {
+                    await _unitOfWork.FileStoreageRepository.DeleteFileAsync(category.ImageUrl);
+                }
 
+
+                return new ApiResponse<CategoryDto>
+                {
+                    Success = false,
+                    Message = "Category creation failed: " + ex.InnerException.Message,
+                    Data = null
+                };
             }
-            return new ApiResponse<CategoryDto>
-            {
-                Success = false,
-                Message = "Category created fail",
-                Data = null
-            };
         }
+
     }
 }

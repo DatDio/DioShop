@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DioShop.Application.Contracts.Infrastructure.IRepositories;
+using DioShop.Application.Features.Products.Requests.Queries;
 using DioShop.Domain.Entities;
 using DioShop.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using SendGrid.Helpers.Mail;
 
 namespace DioShop.Infrastructure.Repositories
 {
@@ -25,19 +27,35 @@ namespace DioShop.Infrastructure.Repositories
         }
 
 
-        public List<Product> GetProductsWithProductItem(string? SearchTerm, int? CategoryId)
-        {
-            IQueryable<Product> query = _dbContext.Products;
 
-            if (CategoryId != null)
+
+        public List<Product> GetProductsWithProductItem(GetProductListRequest request)
+        {
+            var query = _dbContext.Products
+                .Include(p => p.ProductItems) // ✅ Include trước khi ToList()
+                .AsNoTracking()
+                .ToList(); // ✅ Lấy danh sách sớm để tránh DataReader lỗi
+
+            if (request.CategoryId != null)
             {
-                query = query.Where(u => u.CategoryId == CategoryId);
+                query = query.Where(u => u.CategoryId == request.CategoryId).ToList();
             }
-            if (!String.IsNullOrEmpty(SearchTerm))
+            if (!String.IsNullOrEmpty(request.SearchTerm))
             {
-                query = query.Where(u => u.Name.Contains(SearchTerm));
+                query = query.Where(u => u.Name.Contains(request.SearchTerm)).ToList();
             }
-            return query.Include(p => p.ProductItems).ToList();
+            if (request.MinPrice.HasValue)
+            {
+                query = query.Where(u => u.ProductItems.Any(pi => pi.Price >= request.MinPrice)).ToList();
+            }
+            if (request.MaxPrice.HasValue)
+            {
+                query = query.Where(u => u.ProductItems.Any(pi => pi.Price <= request.MaxPrice)).ToList();
+            }
+
+            return query;
         }
+
+
     }
 }

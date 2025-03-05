@@ -16,10 +16,10 @@ namespace DioShop.Application.DTOs.Category.Validator
              .NotNull()
              .MaximumLength(30).WithMessage("{PropertyName} must not exceed 30 characters.");
 
-            RuleFor(p => p.Description)
-             .NotEmpty().WithMessage("{PropertyName} is required")
-             .NotNull()
-             .MaximumLength(300).WithMessage("{PropertyName} must not exceed 300 characters.");
+            //RuleFor(p => p.Description)
+            // .NotEmpty().WithMessage("{PropertyName} is required")
+            // .NotNull()
+            // .MaximumLength(300).WithMessage("{PropertyName} must not exceed 300 characters.");
 
             //RuleFor(p => p.ImageUrl)
             //.NotEmpty().WithMessage("{PropertyName} is required")

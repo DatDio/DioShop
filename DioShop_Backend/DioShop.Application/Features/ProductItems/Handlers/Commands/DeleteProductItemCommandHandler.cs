@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DioShop.Application.Contracts.Infrastructure.IRepositories;
 using DioShop.Application.Features.ProductItems.Requests.Commands;
+using DioShop.Application.Ultils;
 using MediatR;
 
 namespace DioShop.Application.Features.ProductItems.Handlers.Commands
 {
-    public class DeleteProductItemCommandHandler : IRequestHandler<DeleteProductItemCommand,Unit>
+    public class DeleteProductItemCommandHandler : IRequestHandler<DeleteProductItemCommand, ApiResponse<object>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -21,7 +22,7 @@ namespace DioShop.Application.Features.ProductItems.Handlers.Commands
             _mapper = mapper;
         }
 
-        public async Task<Unit> Handle(DeleteProductItemCommand request, CancellationToken cancellationToken)
+        public async Task<ApiResponse<object>> Handle(DeleteProductItemCommand request, CancellationToken cancellationToken)
         {
 
             var productItem = await _unitOfWork.ProductItemRepository.Get(request.Id);
@@ -31,7 +32,12 @@ namespace DioShop.Application.Features.ProductItems.Handlers.Commands
             await _unitOfWork.ProductItemRepository.Delete(productItem);
             await _unitOfWork.Save();
 
-            return Unit.Value;
+            return new ApiResponse<object>
+            {
+                Success = true,
+                Message = "ProductItem deleted successfully",
+                Data = null
+            };
         }
     }
 }

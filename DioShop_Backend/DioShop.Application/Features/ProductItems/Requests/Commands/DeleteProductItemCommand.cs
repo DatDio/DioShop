@@ -8,7 +8,7 @@ using MediatR;
 
 namespace DioShop.Application.Features.ProductItems.Requests.Commands
 {
-    public class DeleteProductItemCommand : IRequest<Unit>
+    public class DeleteProductItemCommand : IRequest<ApiResponse<object>>
     {
         public int Id { get; set; }
     }

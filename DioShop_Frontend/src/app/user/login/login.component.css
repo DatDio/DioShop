@@ -306,3 +306,8 @@ a {
 .account-login .outer-link a {
     color: #0167F3;
 }
+:host {
+    display: block;
+    width: 100%;
+  }
+  

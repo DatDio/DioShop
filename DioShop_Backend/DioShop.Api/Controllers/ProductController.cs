@@ -7,6 +7,7 @@ using DioShop.Application.Features.ProductItems.Requests.Queries;
 using DioShop.Application.Features.Products.Requests.Commands;
 using DioShop.Application.Features.Products.Requests.Queries;
 using DioShop.Application.Features.ProductTags.Requests.Commands;
+using DioShop.Application.Ultils;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,18 +25,9 @@ namespace DioShop.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProductDto>>> Get([FromQuery] string? SearchTerm,
-            //[FromQuery] string? SortName,
-            [FromQuery] int Page, [FromQuery] int PageSize, [FromQuery] int? CategoryId)
+        public async Task<ActionResult<ApiResponse<PagedResult>>> Get([FromQuery] GetProductListRequest request)
         {
-            var result = await _mediator.Send(new GetProductListRequest()
-            {
-                Page = Page,
-                PageSize = PageSize,
-                SearchTerm = SearchTerm,
-                //SortName = SortName,
-                CategoryId = CategoryId
-            });
+            var result = await _mediator.Send(request);
 
             return Ok(result);
         }
@@ -68,9 +60,9 @@ namespace DioShop.Api.Controllers
         public async Task<ActionResult> Patch([FromBody] UpdateProductDto product)
         {
             var command = new UpdateProductCommand { ProductDto = product };
-            await _mediator.Send(command);
+            var response = await _mediator.Send(command);
 
-            return NoContent();
+            return Ok(response);
         }
 
         [HttpDelete]
@@ -79,9 +71,9 @@ namespace DioShop.Api.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             var command = new DeleteProductCommand { Id = id };
-            await _mediator.Send(command);
+            var response = await _mediator.Send(command);
 
-            return NoContent();
+            return Ok(response);
         }
 
         [HttpPost]
@@ -144,9 +136,9 @@ namespace DioShop.Api.Controllers
         public async Task<ActionResult> Put([FromBody] UpdateProductItemDto productItem)
         {
             var command = new UpdateProductItemCommand { ProductItemDto = productItem };
-            await _mediator.Send(command);
+            var response = await _mediator.Send(command);
 
-            return NoContent();
+            return Ok(response);
         }
 
         [HttpDelete]
@@ -155,9 +147,9 @@ namespace DioShop.Api.Controllers
         public async Task<ActionResult> DeleteProductItem(int id)
         {
             var command = new DeleteProductItemCommand { Id = id };
-            var response= await _mediator.Send(command);
+            var response = await _mediator.Send(command);
 
-            return NoContent();
+            return Ok(response);
         }
     }
 }

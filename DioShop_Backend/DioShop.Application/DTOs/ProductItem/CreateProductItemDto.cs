@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace DioShop.Application.DTOs.ProductItem
 {
@@ -11,7 +12,8 @@ namespace DioShop.Application.DTOs.ProductItem
         public int ProductId { get; set; }
         public string Name { get; set; }
         public int QuantityInStock { get; set; }
-        public string ImageUrl { get; set; }
+        //public string ImageUrl { get; set; }
         public double Price { get; set; }
+        public IFormFile Image { get; set; }
     }
 }

@@ -10,7 +10,8 @@ namespace DioShop.Api.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class CategoryController : ControllerBase
+    [Authorize]
+    public class CategoryController : ControllerBase
 	{
 		private readonly IMediator _mediator;
 		public CategoryController(IMediator mediator)
@@ -38,7 +39,8 @@ namespace DioShop.Api.Controllers
 
 		[HttpPost]
 		[Authorize(Roles = Role.RoleAdmin)]
-		public async Task<ActionResult> Post([FromBody] CreateCategoryDto productItem)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult> Post([FromForm] CreateCategoryDto productItem)
 		{
 			var command = new CreateCategoryCommand { CategoryDto = productItem };
 			var response = await _mediator.Send(command);

@@ -56,12 +56,17 @@ namespace DioShop.Api.Middlewares
                 errorMessage = unauthorizedException.Message;
             }
 
-            // Định dạng phản hồi JSON
             var response = new ApiResponse<object>
             {
                 Success = false,
                 Message = errorMessage
             };
+            //// Định dạng phản hồi JSON
+            //var response = new ApiResponse<object>
+            //{
+            //    Success = false,
+            //    Message = errorMessage
+            //};
 
             var result = JsonConvert.SerializeObject(response);
 

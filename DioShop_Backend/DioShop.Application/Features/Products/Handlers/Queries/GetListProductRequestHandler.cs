@@ -26,7 +26,7 @@ namespace DioShop.Application.Features.Products.Handlers.Queries
 
         public async Task<ApiResponse<PagedResult>> Handle(GetProductListRequest request, CancellationToken cancellationToken)
         {
-            var products = _unitOfWork.ProductRepository.GetProductsWithProductItem(request.SearchTerm, request.CategoryId);
+            var products = _unitOfWork.ProductRepository.GetProductsWithProductItem(request);
 
             var pagedResult = CommonUtility.ApplyPaging<Product>(request.Page, request.PageSize, products);
 
