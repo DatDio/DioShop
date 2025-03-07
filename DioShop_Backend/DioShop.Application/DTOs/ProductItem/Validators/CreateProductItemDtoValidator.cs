@@ -29,8 +29,7 @@ namespace DioShop.Application.DTOs.ProductItem.Validators
 
             RuleFor(p => p.QuantityInStock)
                    .NotNull().WithMessage("{PropertyName} is required");
-            RuleFor(p => p.ImageUrl)
- .NotNull().WithMessage("{PropertyName} is required");
+    
 
             RuleFor(p => p.Price)
              .NotNull().WithMessage("{PropertyName} is required")
