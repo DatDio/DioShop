@@ -14,6 +14,7 @@ using DioShop.Application.DTOs.User;
 using DioShop.Application.Exceptions;
 using DioShop.Application.Models;
 using DioShop.Application.Models.Identity;
+using DioShop.Application.Ultils;
 using DioShop.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -53,7 +54,7 @@ namespace DioShop.Infrastructure.Services
 			_emailSender = emailSender;
 		}
 
-		public async Task<AuthResponse> Login(AuthRequest request)
+		public async Task<ApiResponse<AuthResponse>> Login(AuthRequest request)
 		{
 			var user = await _userManager.FindByEmailAsync(request.Email)
 				?? throw new Exception($"User with {request.Email} not found.");
@@ -76,25 +77,45 @@ namespace DioShop.Infrastructure.Services
 			await _userManager.UpdateAsync(user);
 
 			var roles = await _userManager.GetRolesAsync(user);
-
-			AuthResponse response = new AuthResponse
+			ApiResponse<AuthResponse> apiResponse = new ApiResponse<AuthResponse>
 			{
-				RefreshToken = refreshToken,
-				AccessToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-				Expiration = jwtSecurityToken.ValidTo,
-				User = new UserDetailDto
+				Success = true,
+
+				Data = new AuthResponse
 				{
-					Address = user.Address,
-					PhoneNumber = user.PhoneNumber,
-					Email = user.Email,
-					Name = user.Name,
-					Id = user.Id,
-					UserName = user.UserName,
-					Roles = roles
+					RefreshToken = refreshToken,
+					AccessToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
+					Expiration = jwtSecurityToken.ValidTo,
+					User = new UserDetailDto
+					{
+						Address = user.Address,
+						PhoneNumber = user.PhoneNumber,
+						Email = user.Email,
+						Name = user.Name,
+						Id = user.Id,
+						UserName = user.UserName,
+						Roles = roles
+					}
 				}
 			};
+   //         AuthResponse response = new AuthResponse
+			//{
+			//	RefreshToken = refreshToken,
+			//	AccessToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
+			//	Expiration = jwtSecurityToken.ValidTo,
+			//	User = new UserDetailDto
+			//	{
+			//		Address = user.Address,
+			//		PhoneNumber = user.PhoneNumber,
+			//		Email = user.Email,
+			//		Name = user.Name,
+			//		Id = user.Id,
+			//		UserName = user.UserName,
+			//		Roles = roles
+			//	}
+			//};
 
-			return response;
+			return apiResponse;
 		}
 
 		public async Task<RegistrationResponse> Register(RegistrationRequest request)

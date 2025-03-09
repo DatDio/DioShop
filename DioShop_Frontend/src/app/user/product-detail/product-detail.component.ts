@@ -26,13 +26,13 @@ export class ProductDetailComponent implements OnInit {
   // loadProduct() {
   //   var productId = this.route.snapshot.paramMap.get('id'); // Lấy ID từ URL
   //   productId = '6'; // Gán tạm để kiểm thử
-  
+
   //   if (productId) {
   //     this.isLoading = true;
   //     this.productService.getProductById(+productId).subscribe({
   //       next: (response) => {
   //         console.log('🔥 Response gốc từ API:', response); // Log toàn bộ response
-  
+
   //         this.product = response; // Nếu muốn xử lý tiếp
   //         this.isLoading = false;
   //       },
@@ -48,7 +48,7 @@ export class ProductDetailComponent implements OnInit {
   //     this.isLoading = false;
   //   }
   // }
-  
+
 
 
   loadProduct() {

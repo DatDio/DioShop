@@ -12,6 +12,7 @@ export class ApiService {
 
   // ✅ GET request
   getTypeRequest<T>(url: string): Observable<T> {
+    console.log('url', url);
     return this._http.get<{ success: boolean; message: string; data: T }>(`${this.baseUrl}${url}`).pipe(
       map(this.handleResponse)
     );
@@ -19,7 +20,8 @@ export class ApiService {
 
   // ✅ POST request
   postTypeRequest<T>(url: string, payload: any): Observable<T> {
-    return this._http.post<{ success: boolean; message: string; data: T }>(`${this.baseUrl}${url}`, payload).pipe(
+    var repo = this._http.post<{ success: boolean; message: string; data: T }>(`${this.baseUrl}${url}`, payload);
+    return repo.pipe(
       map(this.handleResponse)
     );
   }

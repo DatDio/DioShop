@@ -55,7 +55,6 @@ namespace DioShop.Api.Controllers
 
 
 		[HttpPatch]
-	
 		[Authorize(Roles = Role.RoleAdmin)]
         public async Task<ActionResult> Patch([FromBody] UpdateProductDto product)
         {

@@ -6,3 +6,13 @@ body{
         padding: 30px;
     }
 }
+.align-items-center {
+    align-items: center !important;
+}
+.breadcrumbs .breadcrumbs-content {
+    position: relative;
+    text-align: left;
+}
+.breadcrumbs .breadcrumb-nav {
+    text-align: right;
+}

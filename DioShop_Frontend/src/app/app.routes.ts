@@ -1,14 +1,17 @@
 import { Routes } from '@angular/router';
-import { ProductDetailComponent } from './user/product-detail/product-detail.component';
-import { HomeComponent } from './user/home/home.component';
-import { LoginComponent } from './user/login/login.component';
-import { CartComponent} from './user/cart/cart.component';
-import { CheckoutComponent} from './user/checkout/checkout.component';
+import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+import { UserLayoutComponent } from './layouts/user-layout/user-layout.component';
+
 export const routes: Routes = [
-    { path: '', component: HomeComponent }, // Khi đường dẫn rỗng, hiển thị app-home
-    { path: 'product-detail', component: ProductDetailComponent },
-    { path: 'login', component: LoginComponent },
-    { path: 'cart', component: CartComponent },
-    { path: 'checkout', component: CheckoutComponent },
-    { path: '**', redirectTo: '' } // Nếu không tìm thấy, redirect về home
-  ];
+  {
+    path: '',
+    component: UserLayoutComponent,
+    loadChildren: () => import('./layouts/user-layout/user-layout.routes').then(m => m.USER_LAYOUT_ROUTES)
+  },
+  {
+    path: 'admin',
+    component: AdminLayoutComponent,
+    loadChildren: () => import('./layouts/admin-layout/admin-layout.routes').then(m => m.ADMIN_LAYOUT_ROUTES)
+  },
+  { path: '**', redirectTo: '' }
+];
