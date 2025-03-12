@@ -1,5 +1,19 @@
 <!-- <app-admin-sidebar></app-admin-sidebar> -->
-<div class="main-content">
-  <!-- <app-admin-navbar></app-admin-navbar> -->
-  <router-outlet></router-outlet>
+<!-- <div class="main-content"> -->
+<!-- <app-admin-navbar></app-admin-navbar> -->
+<!-- <router-outlet></router-outlet>
+</div> -->
+
+
+<div class="container-scroller">
+  <app-header></app-header>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <app-sidebar></app-sidebar>
+
+    <router-outlet></router-outlet>
+    <!-- main-panel ends -->
+  </div>
+  <!-- page-body-wrapper ends -->
 </div>
+<!-- container-scroller -->

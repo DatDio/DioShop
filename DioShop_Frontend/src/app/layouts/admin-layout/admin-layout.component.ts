@@ -1,9 +1,12 @@
 import { Component, Renderer2, Inject, PLATFORM_ID, AfterViewInit } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
+import { HomeComponent } from 'src/app/admin/home/home.component';
+import { HeaderComponent } from 'src/app/admin/header/header.component';
+import { SidebarComponent } from 'src/app/admin/sidebar/sidebar.component';
 @Component({
   selector: 'app-admin-layout',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet,HeaderComponent,SidebarComponent,HomeComponent],
   standalone: true,
   templateUrl: './admin-layout.component.html',
   styleUrls: ['./admin-layout.component.css']
