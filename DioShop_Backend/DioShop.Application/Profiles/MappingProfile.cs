@@ -14,9 +14,7 @@ using DioShop.Application.DTOs.Order;
 using DioShop.Application.DTOs.OrderItem;
 using DioShop.Application.DTOs.Product;
 using DioShop.Application.DTOs.ProductItem;
-using DioShop.Application.DTOs.ProductTag;
 using DioShop.Application.DTOs.ShippingMethod;
-using DioShop.Application.DTOs.Tag;
 using DioShop.Application.DTOs.User;
 using DioShop.Domain.Entities;
 
@@ -53,9 +51,7 @@ namespace DioShop.Application.Profiles
             CreateMap<ShippingMethod, CreateShippingMethodDto>().ReverseMap();
             CreateMap<ShippingMethod, UpdateShippingMethodDto>().ReverseMap();
 
-            CreateMap<Tag, TagDto>().ReverseMap();
-            CreateMap<Tag, CreateTagDto>().ReverseMap();
-            CreateMap<Tag, UpdateTagDto>().ReverseMap();
+       
 
             CreateMap<CartItemDto, CartItem>();
             CreateMap<CartItem, CartItemDto>()
@@ -90,8 +86,7 @@ namespace DioShop.Application.Profiles
 
             CreateMap<OrderItem, UpdateOrderItemDto>().ReverseMap();
 
-            CreateMap<ProductTag, ProductTagDto>().ReverseMap();
-            CreateMap<ProductTag, CreateProductTagDto>().ReverseMap();
+            
             CreateMap<ProductDto, Product>();
             CreateMap<Product, ProductDto>()
               .ForMember(dest => dest.ProductItems, opt => opt.MapFrom(src => src.ProductItems.Select(item => new ProductItemDto

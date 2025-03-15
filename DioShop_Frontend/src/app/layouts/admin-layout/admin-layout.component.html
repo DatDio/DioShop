@@ -10,10 +10,18 @@
   <!-- partial -->
   <div class="container-fluid page-body-wrapper">
     <app-sidebar></app-sidebar>
-
-    <router-outlet></router-outlet>
-    <!-- main-panel ends -->
+    <main [style]="{width: '100%'}">
+      <div class="main-panel" [style.width]="'100%'">
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                  <router-outlet></router-outlet>
+                </div>
+            </div>
+        </div>
+    </div>
+     
+  </main>
   </div>
-  <!-- page-body-wrapper ends -->
+
 </div>
-<!-- container-scroller -->

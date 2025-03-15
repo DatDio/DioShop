@@ -40,9 +40,8 @@ namespace DioShop.Infrastructure.Repositories
         public IBrandRepository BrandRepository =>
             _brandRepository ??= new BrandRepository(_context);
 
-        private ITagRepository _tagRepository;
-        public ITagRepository TagRepository =>
-            _tagRepository ??= new TagRepository(_context);
+ 
+     
 
         private IShippingMethodRepository _shippingMethodRepository;
         public IShippingMethodRepository ShippingMethodRepository =>
@@ -81,9 +80,7 @@ namespace DioShop.Infrastructure.Repositories
 		public IFileStoreageRepository FileStoreageRepository => _fileStoreageRepository;
 
 
-		private IProductTagRepository _productTagRepository;
-        public IProductTagRepository ProductTagRepository =>
-            _productTagRepository ??= new ProductTagRepository(_context);
+	
 
         private ICartRepository _cartRepository;
         public ICartRepository CartRepository =>

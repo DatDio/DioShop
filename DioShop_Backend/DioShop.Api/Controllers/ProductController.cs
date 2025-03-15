@@ -1,12 +1,10 @@
 ﻿using DioShop.Application.Contants;
 using DioShop.Application.DTOs.Product;
 using DioShop.Application.DTOs.ProductItem;
-using DioShop.Application.DTOs.ProductTag;
 using DioShop.Application.Features.ProductItems.Requests.Commands;
 using DioShop.Application.Features.ProductItems.Requests.Queries;
 using DioShop.Application.Features.Products.Requests.Commands;
 using DioShop.Application.Features.Products.Requests.Queries;
-using DioShop.Application.Features.ProductTags.Requests.Commands;
 using DioShop.Application.Ultils;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -43,7 +41,7 @@ namespace DioShop.Api.Controllers
 
 		[HttpPost]
 		[Authorize(Roles = Role.RoleAdmin)]
-		[Route("createProduct")]
+		//[Route("createProduct")]
 		[Consumes("multipart/form-data")] // Chỉ rõ rằng API sẽ nhận multipart/form-data
 		public async Task<ActionResult> Post([FromForm] CreateProductDto product)
 		{
@@ -75,27 +73,7 @@ namespace DioShop.Api.Controllers
             return Ok(response);
         }
 
-        [HttpPost]
-        [Route("producttag")]
-        [Authorize(Roles = Role.RoleAdmin)]
-        public async Task<ActionResult> Post([FromBody] CreateProductTagDto productTag)
-        {
-            var command = new CreateProductTagCommand { ProductTagDto = productTag };
-            var response = await _mediator.Send(command);
-
-            return Ok(response);
-        }
-
-        [HttpDelete]
-        [Route("producttag")]
-        [Authorize(Roles = Role.RoleAdmin)]
-        public async Task<ActionResult> DeleteProductTag(DeleteProductTagDto deleteProductTagDto)
-        {
-            var command = new DeleteProductTagCommand { ProductTagDto = deleteProductTagDto };
-            var response = await _mediator.Send(command);
-
-            return Ok(response);
-        }
+        
 
 
         //Product Item
@@ -121,7 +99,8 @@ namespace DioShop.Api.Controllers
         [HttpPost]
         [Route("productitem")]
         [Authorize(Roles = Role.RoleAdmin)]
-        public async Task<ActionResult> Post([FromBody] CreateProductItemDto productItem)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult> Post([FromForm] CreateProductItemDto productItem)
         {
             var command = new CreateProductItemCommand { ProductItemDto = productItem };
             var response = await _mediator.Send(command);

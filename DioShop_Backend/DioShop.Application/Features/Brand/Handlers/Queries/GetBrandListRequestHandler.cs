@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DioShop.Application.Contracts.Infrastructure.IRepositories;
 using DioShop.Application.DTOs.Brand;
-using DioShop.Application.DTOs.ProductTag;
 using DioShop.Application.Features.Brand.Requests.Queries;
 using DioShop.Application.Ultils;
 using MediatR;

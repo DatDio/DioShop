@@ -1,30 +1,43 @@
-import { Component, Renderer2, Inject, PLATFORM_ID, AfterViewInit } from '@angular/core';
+import { Component, Renderer2, Inject, PLATFORM_ID, AfterViewInit, OnDestroy,OnInit } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
-import { HomeComponent } from 'src/app/admin/home/home.component';
+import { RouterOutlet, Router } from '@angular/router';
 import { HeaderComponent } from 'src/app/admin/header/header.component';
 import { SidebarComponent } from 'src/app/admin/sidebar/sidebar.component';
+import { filter } from 'rxjs/operators';
+import { NavigationEnd } from '@angular/router';
+import { ChangeDetectionStrategy } from '@angular/core';
+
 @Component({
   selector: 'app-admin-layout',
-  imports: [RouterOutlet,HeaderComponent,SidebarComponent,HomeComponent],
+  imports: [RouterOutlet, HeaderComponent, SidebarComponent],
   standalone: true,
   templateUrl: './admin-layout.component.html',
   styleUrls: ['./admin-layout.component.css']
 })
-export class AdminLayoutComponent implements AfterViewInit {
+export class AdminLayoutComponent implements OnInit, OnDestroy {
+  private cssLinks: HTMLLinkElement[] = [];
+  private scripts: HTMLScriptElement[] = [];
+
   constructor(
     private renderer: Renderer2,
     @Inject(PLATFORM_ID) private platformId: any
   ) {}
 
-  ngAfterViewInit() {
+  ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      this.loadStyles();
-      this.loadScripts();
+      this.loadAdminStyles();
+      this.loadAdminScripts();
     }
   }
 
-  private loadStyles() {
+  ngOnDestroy() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.removeAdminStyles();
+      this.removeAdminScripts();
+    }
+  }
+
+  private loadAdminStyles() {
     const styles = [
       'assets/admin/assets/vendors/feather/feather.css',
       'assets/admin/assets/vendors/mdi/css/materialdesignicons.min.css',
@@ -41,7 +54,7 @@ export class AdminLayoutComponent implements AfterViewInit {
     styles.forEach(href => this.addCss(href));
   }
 
-  private loadScripts() {
+  private loadAdminScripts() {
     const scripts = [
       'assets/admin/assets/vendors/js/vendor.bundle.base.js',
       'assets/admin/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js',
@@ -55,41 +68,36 @@ export class AdminLayoutComponent implements AfterViewInit {
       'assets/admin/assets/js/jquery.cookie.js',
       'assets/admin/assets/js/dashboard.js'
     ];
-    let loadedCount = 0;
-
-    scripts.forEach(src => {
-      this.addScript(src, () => {
-        loadedCount++;
-        if (loadedCount === scripts.length) {
-          this.runCustomScript();
-        }
-      });
-    });
+    scripts.forEach(src => this.addScript(src));
   }
 
   private addCss(href: string) {
-    if (isPlatformBrowser(this.platformId)) {
-      const link = this.renderer.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = href;
-      this.renderer.appendChild(document.head, link);
-    }
+    const link = this.renderer.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    link.classList.add('admin-style'); // Đánh dấu để dễ xóa
+    this.renderer.appendChild(document.head, link);
+    this.cssLinks.push(link);
   }
 
-  private addScript(src: string, onLoad?: () => void) {
-    if (isPlatformBrowser(this.platformId)) {
-      const script = this.renderer.createElement('script');
-      script.src = src;
-      script.async = false;
-      script.defer = false;
-      if (onLoad) {
-        script.onload = onLoad;
-      }
-      this.renderer.appendChild(document.body, script);
-    }
+  private addScript(src: string) {
+    const script = this.renderer.createElement('script');
+    script.src = src;
+    script.async = false;
+    script.defer = false;
+    script.classList.add('admin-script'); // Đánh dấu để dễ xóa
+    this.renderer.appendChild(document.body, script);
+    this.scripts.push(script);
   }
 
-  private runCustomScript() {
-    console.log('Admin scripts loaded successfully!');
+  private removeAdminStyles() {
+    this.cssLinks.forEach(link => this.renderer.removeChild(document.head, link));
+    this.cssLinks = [];
+  }
+
+  private removeAdminScripts() {
+    this.scripts.forEach(script => this.renderer.removeChild(document.body, script));
+    this.scripts = [];
   }
 }
+

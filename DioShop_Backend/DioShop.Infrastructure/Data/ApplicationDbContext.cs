@@ -18,7 +18,6 @@ namespace DioShop.Infrastructure.Data
         }
         public DbSet<Coupon> Coupons { get; set; }
         public DbSet<Brand> Brands { get; set; }
-        public DbSet<Tag> Tags { get; set; }
         public DbSet<ShippingMethod> ShippingMethods { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Cart> Carts { get; set; }
@@ -27,7 +26,6 @@ namespace DioShop.Infrastructure.Data
         public DbSet<OrderItem> OrderItems { get; set; }
 
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductTag> ProductTags { get; set; }
         public DbSet<ProductItem> ProductItems { get; set; }
         public DbSet<ChatMessage> ChatMessages { get; set; }
 

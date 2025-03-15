@@ -22,18 +22,16 @@
                 <form class="card login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                     <div class="card-body">
                       <div class="title">
-                        <h3>Login Now</h3>
+                        <h3>Đăng Nhập</h3>
                         <p>You can login using your social media account or email address.</p>
                       </div>
                       <div class="social-login">
                         <div class="row">
-                          <div class="col-lg-4 col-md-4 col-12">
+                          <!-- <div class="col-lg-4 col-md-4 col-12">
                             <a class="btn facebook-btn" href="javascript:void(0)"><i class="lni lni-facebook-filled"></i> Facebook login</a>
-                          </div>
-                          <div class="col-lg-4 col-md-4 col-12">
-                            <a class="btn twitter-btn" href="javascript:void(0)"><i class="lni lni-twitter-original"></i> Twitter login</a>
-                          </div>
-                          <div class="col-lg-4 col-md-4 col-12">
+                          </div> -->
+                         
+                          <div class=" col-12">
                             <a class="btn google-btn" href="javascript:void(0)"><i class="lni lni-google"></i> Google login</a>
                           </div>
                         </div>
@@ -45,27 +43,27 @@
                         <label for="reg-email">Email</label>
                         <input class="form-control" type="email" id="reg-email" formControlName="email" required>
                         <div *ngIf="loginForm.controls['email'].invalid && loginForm.controls['email'].touched" class="text-danger">
-                          Please enter a valid email.
+                          Vui lòng điền email hợp lệ
                         </div>
                       </div>
                       <div class="form-group input-group">
-                        <label for="reg-pass">Password</label>
+                        <label for="reg-pass">Mật Khẩu</label>
                         <input class="form-control" type="password" id="reg-pass" formControlName="password" required>
                         <div *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched" class="text-danger">
-                          Password must be at least 6 characters.
+                          <!-- Password must be at least 6 characters. -->
                         </div>
                       </div>
                       <div class="d-flex flex-wrap justify-content-between bottom-content">
                         <div class="form-check">
                           <input type="checkbox" class="form-check-input width-auto" id="exampleCheck1">
-                          <label class="form-check-label">Remember me</label>
+                          <label class="form-check-label">Ghi Nhớ Đăng Nhập</label>
                         </div>
-                        <a class="lost-pass" href="account-password-recovery.html">Forgot password?</a>
+                        <a class="lost-pass" href="account-password-recovery.html">Quên Mật Khẩu</a>
                       </div>
                       <div class="button">
-                        <button class="btn" type="submit" [disabled]="loginForm.invalid">Login</button>
+                        <button class="btn" type="submit" [disabled]="loginForm.invalid">Đăng Nhập</button>
                       </div>
-                      <p class="outer-link">Don't have an account? <a href="register.html">Register here </a></p>
+                      <p class="outer-link">Chưa có tài khoản? <a href="register.html">Đăng kí ngay</a></p>
                       <div *ngIf="errorMessage" class="text-danger">
                         {{ errorMessage }}
                       </div>

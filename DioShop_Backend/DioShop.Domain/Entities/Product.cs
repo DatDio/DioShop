@@ -17,7 +17,6 @@ namespace DioShop.Domain.Entities
         public Brand Brand { get; set; }
         public string ImageUrl { get; set; }
         public ICollection<ProductItem> ProductItems { get; set; }
-        public ICollection<ProductTag> ProductTags { get; set; }
 
     }
 }
